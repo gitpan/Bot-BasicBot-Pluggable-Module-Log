@@ -9,7 +9,7 @@ use base qw(Bot::BasicBot::Pluggable::Module);
 use POSIX qw(strftime);
 use File::Spec::Functions qw(catfile curdir);
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 sub init {
     my ($self) = @_;
@@ -23,6 +23,8 @@ sub init {
       if ! defined $self->get('user_ignore_bot');
     $self->set( 'user_ignore_joinpart', 0 )
       if ! defined $self->get('user_ignore_joinpart');
+    $self->set( 'user_ignore_query', 1 )
+      if ! defined $self->get('user_ignore_query');
     return;
 }
 
@@ -32,6 +34,10 @@ sub seen {
     my $body = $message->{body};
     my $who  = '<' . $message->{who} . '> ';
     my $nick = $self->bot->nick();
+
+    if ( $self->get('user_ignore_query') and $message->{channel} eq 'msg') {
+        return;
+    }
 
     if ( $self->get('user_ignore_bot') ) {
         return if $message->{who} eq $nick;
@@ -188,6 +194,10 @@ Whether to ignore all communications with this bot. Defaults to 1.
 =head2 ignore_joinpart
 
 Whether to log join and part events. Defaults to 0.
+
+=head2 ignore_query
+
+Whether to ignore all communications in a query with this bot. Defaults to 1.
 
 =head1 AUTHOR
 

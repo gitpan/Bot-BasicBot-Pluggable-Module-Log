@@ -66,6 +66,10 @@ VARIABLES
   ignore_joinpart
     Whether to log join and part events. Defaults to 0.
 
+  ignore_query
+    Whether to ignore all communications in a query with this bot. Defaults
+    to 1.
+
 AUTHOR
     Mario Domgoergen, "<dom at math.uni-bonn.de>"
 
