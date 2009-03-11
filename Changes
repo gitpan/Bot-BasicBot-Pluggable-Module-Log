@@ -1,0 +1,7 @@
+2009-03-11 Mario Domgoergen <dom@math.uni-bonn.de>
+	
+	* Added testsuite t/01-basic.t (Coverage: 88.1%)
+
+2009-03-10 Mario Domgoergen <dom@math.uni-bonn.de>
+
+	* Added documentation
