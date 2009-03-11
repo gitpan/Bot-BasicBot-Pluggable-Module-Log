@@ -27,6 +27,9 @@ FUNCTIONS
 
     [#botzone 12:34:12] <me> Hello World
 
+  emoted
+    This function simply calls seen.
+
   chanjoin
     This function is called every time someone enters the channel. The event
     is logged as follows:

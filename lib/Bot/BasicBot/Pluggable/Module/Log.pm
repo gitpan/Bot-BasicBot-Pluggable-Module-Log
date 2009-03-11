@@ -9,7 +9,7 @@ use base qw(Bot::BasicBot::Pluggable::Module);
 use POSIX qw(strftime);
 use File::Spec::Functions qw(catfile curdir);
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 sub init {
     my ($self) = @_;
@@ -30,26 +30,45 @@ sub init {
 
 sub seen {
     my ( $self, $message ) = @_;
-
+    return if $self->_filter_message($message);
     my $body = $message->{body};
     my $who  = '<' . $message->{who} . '> ';
+    $self->_log( $message, $who . $body );
+    return;
+}
+
+sub _filter_message {
+    my ( $self, $message ) = @_;
+
+    my $body = $message->{body};
     my $nick = $self->bot->nick();
 
     if ( $self->get('user_ignore_query') and $message->{channel} eq 'msg') {
-        return;
+        return 1;
     }
 
     if ( $self->get('user_ignore_bot') ) {
-        return if $message->{who} eq $nick;
-        return if $message->{address} and $message->{address} eq $nick;
+        return 1 if $message->{who} eq $nick;
+        return 1 if $message->{address} and $message->{address} eq $nick;
     }
 
     if ( $self->get('user_ignore_pattern') ) {
         my $pattern = $self->get('user_ignore_pattern');
-        return if $body =~ /$pattern/;
+        return 1 if $body =~ /$pattern/;
     }
+    return;
 
-    $self->_log( $message, $who . $body );
+}
+
+sub emoted {
+    my ( $self, $message, $prio ) = @_;
+
+    return if $prio != 0;
+    return if $self->_filter_message($message);
+
+    my $body = $message->{body};
+    my $who  = '* ' . $message->{who} ;
+    $self->_log( $message, "$who $body" );
     return;
 }
 
@@ -145,6 +164,10 @@ body of the message matches the pattern defined in C<ignore_pattern>. The
 default logging output would look something like
 
 [#botzone 12:34:12] <me> Hello World
+
+=head2 emoted
+
+This function simply calls seen.
 
 =head2 chanjoin
 

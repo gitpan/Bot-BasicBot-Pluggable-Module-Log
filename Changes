@@ -3,6 +3,7 @@
 	* Added testsuite t/01-basic.t (Coverage: 88.1%)
 	* Adjusted test names
 	* Added variable ignore_query
+	* React to emoted in priority 0
 
 2009-03-10 Mario Domgoergen <dom@math.uni-bonn.de>
 

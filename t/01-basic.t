@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 17;
+use Test::More tests => 19;
 
 BEGIN {
 	*CORE::GLOBAL::localtime = sub  { return (37,21,9,11,2,109,3,69,0) };
@@ -104,5 +104,11 @@ $module->set('user_ignore_bot',0);
 $module->seen($query);
 is($module->last_log(),'[msg 09:21:37] <bob> Foobar!','log query');
 
+$module->emoted($query,0);
+is($module->last_log(),'[msg 09:21:37] * bob Foobar!','emoting');
+
+$module->clear_log;
+$module->emoted($query,1);
+is($module->last_log(),'','ignore emoting with higher priority than 0');
 
 1;
