@@ -12,7 +12,7 @@ WriteMakefile
                            'POSIX' => 0,
                            'autodie' => 0,
                            'File::Spec' => 0,
-                           'Bot::BasicBot::Pluggable' => 0
+                           'Bot::BasicBot::Pluggable' => '0.60'
                          }
         )
 ;

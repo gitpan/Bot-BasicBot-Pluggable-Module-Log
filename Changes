@@ -1,3 +1,8 @@
+2009-03-13 Mario Domgoergen <dom@math.uni-bonn.de>
+
+	* Wrong dependency on B:B:P, we need at least version 0.6 as
+	  the store sematic has changed
+
 2009-03-11 Mario Domgoergen <dom@math.uni-bonn.de>
 	
 	* Added testsuite t/01-basic.t (Coverage: 88.1%)

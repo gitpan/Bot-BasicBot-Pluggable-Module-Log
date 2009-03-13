@@ -9,7 +9,7 @@ use base qw(Bot::BasicBot::Pluggable::Module);
 use POSIX qw(strftime);
 use File::Spec::Functions qw(catfile curdir);
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 sub init {
     my ($self) = @_;

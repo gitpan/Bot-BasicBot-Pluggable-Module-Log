@@ -15,11 +15,10 @@ use base qw(Bot::BasicBot::Pluggable::Module::Log);
 my $last_log;
 
 sub _log_to_file { $last_log = $_[2]; }
-sub last_log    { return $last_log;  }
+sub last_log     { return $last_log;  }
 sub clear_log    { $last_log = '';    }
 
 package main;
-
 
 use Bot::BasicBot::Pluggable;
 
@@ -34,11 +33,11 @@ my $bot = Bot::BasicBot::Pluggable->new(
 my $module = Bot::BasicBot::Pluggable::Module::TestLog->new(Bot => $bot);
 
 
-my $message              = { channel => '#botzone', body => 'Foobar!', who => 'bob' };
-my $message_from_bot     = { channel => '#botzone', body => 'Foobar!', who => 'TestBot' };
-my $message_to_bot       = { channel => '#botzone', body => 'Foobar!', who => 'bob',  address => 'TestBot' };
-my $foobarless_message   = { channel => '#botzone', body => 'Bar!',    who => 'bob',  address => 'TestBot' };
-my $query                = { channel => 'msg',      body => 'Foobar!', who => 'bob' };
+my $message            = { channel => '#botzone', body => 'Foobar!', who => 'bob'                           };
+my $message_from_bot   = { channel => '#botzone', body => 'Foobar!', who => 'TestBot'                       };
+my $message_to_bot     = { channel => '#botzone', body => 'Foobar!', who => 'bob',     address => 'TestBot' };
+my $foobarless_message = { channel => '#botzone', body => 'Bar!',    who => 'bob',     address => 'TestBot' };
+my $query              = { channel => 'msg',      body => 'Foobar!', who => 'bob'                           };
 
 is($module->_filename($message),'./botzone_20090311.log','filname in current directory');
 
