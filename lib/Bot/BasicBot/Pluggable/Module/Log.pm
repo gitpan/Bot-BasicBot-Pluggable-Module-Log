@@ -7,24 +7,26 @@ use autodie;
 use base qw(Bot::BasicBot::Pluggable::Module);
 
 use POSIX qw(strftime);
-use File::Spec::Functions qw(catfile curdir);
+use File::Spec::Functions qw(catfile curdir splitpath);
 
-our $VERSION = '0.05';
+our $VERSION = '0.07';
 
 sub init {
     my ($self) = @_;
     $self->set( 'user_ignore_pattern', undef )
-      if ! defined $self->get('user_ignore_pattern');
+      if !defined $self->get('user_ignore_pattern');
     $self->set( 'user_log_path', curdir() )
-      if ! defined $self->get('user_log_path');
+      if !defined $self->get('user_log_path');
     $self->set( 'user_timestamp_fmt', '%H:%M:%S' )
-      if ! defined $self->get('user_timestamp_fmt');
+      if !defined $self->get('user_timestamp_fmt');
     $self->set( 'user_ignore_bot', 1 )
-      if ! defined $self->get('user_ignore_bot');
+      if !defined $self->get('user_ignore_bot');
     $self->set( 'user_ignore_joinpart', 0 )
-      if ! defined $self->get('user_ignore_joinpart');
+      if !defined $self->get('user_ignore_joinpart');
     $self->set( 'user_ignore_query', 1 )
-      if ! defined $self->get('user_ignore_query');
+      if !defined $self->get('user_ignore_query');
+    $self->set( 'user_link_current', 1 )
+      if !defined $self->get('user_link_current');
     return;
 }
 
@@ -43,7 +45,7 @@ sub _filter_message {
     my $body = $message->{body};
     my $nick = $self->bot->nick();
 
-    if ( $self->get('user_ignore_query') and $message->{channel} eq 'msg') {
+    if ( $self->get('user_ignore_query') and $message->{channel} eq 'msg' ) {
         return 1;
     }
 
@@ -67,7 +69,7 @@ sub emoted {
     return if $self->_filter_message($message);
 
     my $body = $message->{body};
-    my $who  = '* ' . $message->{who} ;
+    my $who  = '* ' . $message->{who};
     $self->_log( $message, "$who $body" );
     return;
 }
@@ -101,6 +103,26 @@ sub _log_to_file {
     my ( $self, $message, $logstr ) = @_;
 
     my $file = $self->_filename($message);
+
+    if ( $self->get('user_link_current') ) {
+
+        my $channel = $message->{channel};
+        $channel =~ s/^#//;
+
+        my $link =
+          catfile( $self->get('user_log_path'), $channel . '_current.log' );
+
+        my $old_target = eval { readlink($link) };
+        my ( undef, undef, $new_target ) = splitpath($file);
+
+        if ( !-e $link ) {
+            eval { symlink( $new_target, $link ) };
+        }
+        elsif ( $old_target and $old_target ne $new_target ) {
+            unlink($link);
+            eval { symlink( $new_target, $link ) };
+        }
+    }
 
     open( my $log, '>>', catfile($file) );
     print {$log} $logstr . "\n";
@@ -136,7 +158,7 @@ Bot::BasicBot::Pluggable::Module::Log - Provide logging for Bot::BasicBot::Plugg
 
 =head1 VERSION
 
-Version 0.01
+Version 0.07
 
 
 =head1 SYNOPSIS
@@ -221,6 +243,11 @@ Whether to log join and part events. Defaults to 0.
 =head2 ignore_query
 
 Whether to ignore all communications in a query with this bot. Defaults to 1.
+
+=head2 link_current
+
+If this variable is true (default), we will generate a symbolic link to the current
+logfile called $channel_current.log.
 
 =head1 AUTHOR
 

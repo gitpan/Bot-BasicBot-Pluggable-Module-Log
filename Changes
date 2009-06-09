@@ -1,3 +1,7 @@
+2009-06-09 Mario Domgoergen <dom@math.uni-bonn.de>
+
+	* create a symlink to the current logfile
+
 2009-03-13 Mario Domgoergen <dom@math.uni-bonn.de>
 
 	* Wrong dependency on B:B:P, we need at least version 0.6 as

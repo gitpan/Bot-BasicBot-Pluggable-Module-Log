@@ -3,7 +3,7 @@ NAME
     Bot::BasicBot::Pluggable
 
 VERSION
-    Version 0.01
+    Version 0.07
 
 SYNOPSIS
     This module logs all traffic in irc channels to files. Every channel is
@@ -72,6 +72,10 @@ VARIABLES
   ignore_query
     Whether to ignore all communications in a query with this bot. Defaults
     to 1.
+
+  link_current
+    If this variable is true (default), we will generate a symbolic link to
+    the current logfile called $channel_current.log.
 
 AUTHOR
     Mario Domgoergen, "<dom at math.uni-bonn.de>"
